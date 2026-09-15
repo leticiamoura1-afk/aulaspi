@@ -11,4 +11,14 @@ public class EventosController {
 	return "formEvento";
 
 	}
+
+	
+	@RequestMapping("/eventos")
+	public String adicionar(Evento evento) {
+		
+		System.out.println(evento);
+		
+		return "evento-adicionado";
+	}
+	
 }
