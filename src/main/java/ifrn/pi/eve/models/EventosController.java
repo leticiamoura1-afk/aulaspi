@@ -22,7 +22,7 @@ public class EventosController {
 
 	@GetMapping("/form")
 	public String form() {
-	return "eventos/formEvento.html";
+	return "eventos/formEvento";
 
 	}
 
@@ -33,13 +33,13 @@ public class EventosController {
 		System.out.println(evento);
 		er.save(evento);
 		
-		return "eventos/evento-adicionado.html";
+		return "eventos/evento-adicionado";
 	}
 	
 	@GetMapping
 	public ModelAndView listar() {
 		List<Evento> eventos = er.findAll();
-		ModelAndView mv = new ModelAndView("/eventos/lista");
+		ModelAndView mv = new ModelAndView("eventos/lista");
 		mv.addObject("eventos", eventos);
 		return mv;
 	}
