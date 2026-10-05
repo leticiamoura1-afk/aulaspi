@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,22 +20,19 @@ public class EventosController {
 	
 	@Autowired
 	private EventoRepository er;
+	
 	@Autowired
 	private ConvidadoRepository cr;
 
 	@GetMapping("/form")
 	public String form() {
-	return "eventos/formEvento";
-
+		return "eventos/formEvento";
 	}
 
-	
 	@PostMapping
 	public String adicionar(Evento evento) {
-		
 		System.out.println(evento);
 		er.save(evento);
-		
 		return "eventos/evento-adicionado";
 	}
 	
@@ -56,7 +52,6 @@ public class EventosController {
 		if(opt.isEmpty()) {
 			md.setViewName("redirect:/eventos");
 			return md;
-	
 		}
 		
 		md.setViewName("eventos/detalhes");
@@ -68,19 +63,16 @@ public class EventosController {
 		md.addObject("convidados", convidados);
 		
 		return md;
-		
 	}
 	
 	@PostMapping("/{idEvento}")
 	public String salvarConvidado(@PathVariable Long idEvento, Convidado convidado) {
-		
-		System.out.println("Id do evento: "+ idEvento);
+		System.out.println("Id do evento: " + idEvento);
 		System.out.println(convidado);
 		
 		Optional<Evento> opt = er.findById(idEvento);
 		if (opt.isEmpty()) {
 			return "redirect:/eventos";
-			
 		}
 		
 		Evento evento = opt.get();
@@ -93,12 +85,10 @@ public class EventosController {
 	
 	@GetMapping("/{id}/remover")
 	public String apagarEvento(@PathVariable Long id) {
-		
 		Optional<Evento> opt = er.findById(id);
 		
 		if(!opt.isEmpty()) {
 			Evento evento = opt.get();
-			
 			List<Convidado> convidados = cr.findByEvento(evento);
 			
 			cr.deleteAll(convidados);
@@ -107,7 +97,19 @@ public class EventosController {
 		
 		return "redirect:/eventos";
 	}
-	
+
+	// NOVO MÉTODO ADICIONADO PARA DELETAR O CONVIDADO
+	@GetMapping("/{idEvento}/convidados/{idConvidado}/remover")
+	public String apagarConvidado(@PathVariable Long idEvento, @PathVariable Long idConvidado) {
+		Optional<Convidado> optConvidado = cr.findById(idConvidado);
+		
+		if(!optConvidado.isEmpty()) {
+			Convidado convidado = optConvidado.get();
+			cr.delete(convidado);
+		}
+		
+		return "redirect:/eventos/" + idEvento;
 	}
+}
 	
 
