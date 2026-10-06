@@ -1,9 +1,16 @@
 package ifrn.pi.eve.models;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Evento {
@@ -11,11 +18,20 @@ public class Evento {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String nome;
-	private String local;
-	private String data;
-	private String horario;
 	
+	@NotBlank(message = "não deve estar em branco")
+	private String nome;
+	
+	@NotBlank(message = "não deve estar em branco")
+	private String local;
+	
+	@NotNull(message = "não deve ser nulo")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate data;
+	
+	@NotNull(message = "não deve ser nulo")
+	@DateTimeFormat(pattern = "HH:mm")
+	private LocalTime horario;
 	
 	public Long getId() {
 		return id;
@@ -32,31 +48,34 @@ public class Evento {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 	public String getLocal() {
 		return local;
 	}
+
 	public void setLocal(String local) {
 		this.local = local;
 	}
-	public String getData() {
+
+	public LocalDate getData() {
 		return data;
 	}
-	public void setData(String data) {
+
+	// CORRIGIDO: Alterado de LocalDate() para setData()
+	public void setData(LocalDate data) {
 		this.data = data;
 	}
-	public String getHorario() {
+
+	public LocalTime getHorario() {
 		return horario;
 	}
-	public void setHorario(String horario) {
+
+	public void setHorario(LocalTime horario) {
 		this.horario = horario;
 	}
 
 	@Override
 	public String toString() {
-		return "Evento [id=" + id + ", nome=" + nome + ", local=" + local + ", data=" + data + ", horario=" + horario
-				+ "]";
+		return "Evento [id=" + id + ", nome=" + nome + ", local=" + local + ", data=" + data + ", horario=" + horario + "]";
 	}
-	
-	
-	
 }

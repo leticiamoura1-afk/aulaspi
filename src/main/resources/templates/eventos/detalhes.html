@@ -5,7 +5,7 @@
 <!-- Compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-<!-- Materialize Icons (Necessário para a lixeira) -->
+<!-- Materialize Icons (Necessário para os ícones) -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <title>Eventos</title>
 </head>
@@ -17,6 +17,7 @@
 
 		<h1>Detalhes do evento</h1>
 
+		<!-- CARD COM DETALHES DO EVENTO -->
 		<div class="row">
 	    <div class="col s12">
 	      <div class="card">
@@ -32,20 +33,31 @@
 	    </div>
 	  </div>
 	  
+	  <!-- CARD DO FORMULÁRIO (ADICIONAR / EDITAR CONVIDADO) -->
 	  <div class="row">
 	    <div class="col s12">
 	      <div class="card">
 	        <div class="card-content">
 	          <span class="card-title">Adicionar convidado</span>
-	          <form th:action="@{/eventos/{idEvento}(idEvento=${evento.id})}" method="post">
+	          
+	          <!-- MENSAGEM FLASH DE SUCESSO (SALVO OU REMOVIDO) -->
+	          <div th:if="${mensagem}" class="card-panel green lighten-4 green-text text-darken-4">
+	              <span th:text="${mensagem}"></span>
+	          </div>
+
+	          <form th:action="@{/eventos/{idEvento}(idEvento=${evento.id})}" method="post" th:object="${convidado}">
 	          		<div>
-	          			<input type="hidden" name="id" th:value="${convidado.id}" readonly="readonly">
+	          			<input type="hidden" th:field="*{id}" readonly="readonly">
 	          		</div>
 	          		<div>
-	          			<label>Nome: </label> <input type="text" name="nome" th:value="${convidado.nome}">
+	          			<label>Nome: </label> 
+	          			<input type="text" th:field="*{nome}">
+	          			<p th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="red-text text-darken-2"></p>
 	          		</div>
 	          		<div>
-	          			<label>RG: </label> <input type="text" name="rg" th:value="${convidado.rg}">
+	          			<label>RG: </label> 
+	          			<input type="text" th:field="*{rg}">  
+	          			<p th:if="${#fields.hasErrors('rg')}" th:errors="*{rg}" class="red-text text-darken-2"></p>  
 	          		</div>
 	          		<div>
 	          			<button type="submit" class="btn">Salvar</button>
@@ -57,6 +69,7 @@
 	    </div>
 	  </div>
 	  
+	  <!-- CARD COM A TABELA DE CONVIDADOS -->
 	  <div class="row">
 	    <div class="col s12">
 	      <div class="card">
@@ -77,7 +90,9 @@
 	          			<td th:text="${c.nome}">Leticia Moura</td>
 	          			<td th:text="${c.rg}">123</td>
 	          			<td>
-	          				<a th:href="@{/eventos/{idEvento}/convidados/{idConvidado}/selecionar(idEvento=${evento.id},idConvidado=${c.id})}"><i class="material-icons red-text">edit</i></a>
+	          				<a th:href="@{/eventos/{idEvento}/convidados/{idConvidado}/selecionar(idEvento=${evento.id},idConvidado=${c.id})}">
+	          					<i class="material-icons blue-text">edit</i>
+	          				</a>
 	          				<a th:href="@{/eventos/{idEvento}/convidados/{idConvidado}/remover(idEvento=${evento.id}, idConvidado=${c.id})}">
 	          					<i class="material-icons red-text">delete</i>
 	          				</a>

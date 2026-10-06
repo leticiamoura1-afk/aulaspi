@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Convidado {
@@ -12,7 +13,11 @@ public class Convidado {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank(message = "não deve estar em branco")
 	private String nome;
+	
+	@NotBlank(message = "não deve estar em branco")
 	private String rg;
 	
 	@ManyToOne
@@ -50,9 +55,8 @@ public class Convidado {
 		this.evento = evento;
 	}
 
+	@Override
 	public String toString() {
-		return "Convidado [id=" + id + ", nome=" + nome + ", rg=" + rg + ", evento=" + evento +"]";
+		return "Convidado [id=" + id + ", nome=" + nome + ", rg=" + rg + ", evento=" + evento + "]";
 	}
-	
-
 }
